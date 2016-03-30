@@ -31,6 +31,12 @@
         "build": [
             "rm -rf vendor",
             "composer install --no-dev"
+        ],
+        "deploy": [
+          "composer build",
+          "git add .",
+          "git commit --amend --no-edit",
+          "git push upstream master"
         ]
     },
     "prefer-stable": true,
