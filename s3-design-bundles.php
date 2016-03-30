@@ -12,4 +12,3 @@ Version: 1.0.0
 Author URI: http://github.com/brianium
 */
 require 'vendor/autoload.php';
-?>

@@ -1,1 +1,8 @@
-
+.idea
+vendor/bin
+vendor/leafo
+vendor/netrivet
+vendor/robmorgan
+vendor/symfony
+vendor/tedivm
+vendor/webpatser
