@@ -1,0 +1,44 @@
+{
+    "name": "netrivet/s3-design-bundles",
+    "description": "Supports bundling designs to amazon s3",
+    "type": "plugin",
+    "license": "SUPERENTERPRISE",
+    "authors": [
+        {
+            "name": "Brian Scaturro",
+            "email": "scaturrob@gmail.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/netrivet/scssphp.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/netrivet/common.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/netrivet/prophoto-classes.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/netrivet/prophoto-cli.git"
+        }
+    ],
+    "scripts": {
+        "build": [
+            "rm -rf vendor",
+            "composer install --no-dev"
+        ]
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require-dev": {
+        "netrivet/prophoto-classes": "dev-master"
+    },
+    "require": {
+        "aws/aws-sdk-php": "^3.17"
+    }
+}
