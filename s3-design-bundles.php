@@ -6,7 +6,7 @@
 /*
 Plugin Name: S3 Design Bundles
 Plugin URI: http://prophoto.com
-Description: Supports bundling designs to amazon s3
+Description: Supports bundling prophoto designs to amazon s3
 Author: Brian Scaturro
 Version: 1.0.0
 Author URI: http://github.com/brianium
