@@ -121,7 +121,7 @@ class S3Bundler extends Bundler
         }
 
         $promises = [];
-        $dir = $this->getRootDir($bundle);
+        $dir = $this->getRootDir($bundle) . "/gallery";
         foreach ($galleries as $gallery) {
             $id = $gallery->getId();
             $folder = "$dir/$id";
