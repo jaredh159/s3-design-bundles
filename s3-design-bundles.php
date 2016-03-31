@@ -12,3 +12,9 @@ Version: 1.0.0
 Author URI: http://github.com/brianium
 */
 require 'vendor/autoload.php';
+
+// require classes used by plugin
+require 'src/Design/S3Bundler.php';
+
+// require hooks
+require 'hooks/index.php';

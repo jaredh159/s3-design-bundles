@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "43fe62078ad174b07de2f6ad7432ac04",
+    "hash": "71cbb12460413aa4e6b5ab256f936495",
     "content-hash": "fb6e6c00489308d35c495b7c9a3737a7",
     "packages": [
         {
@@ -520,12 +520,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:netrivet/prophoto-classes.git",
-                "reference": "1d32c28f8f611b0243666a60ea0b37cb8f3729e7"
+                "reference": "1309340dc948153923092e1540e555ad7232646a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/netrivet/prophoto-classes/zipball/1d32c28f8f611b0243666a60ea0b37cb8f3729e7",
-                "reference": "1d32c28f8f611b0243666a60ea0b37cb8f3729e7",
+                "url": "https://api.github.com/repos/netrivet/prophoto-classes/zipball/1309340dc948153923092e1540e555ad7232646a",
+                "reference": "1309340dc948153923092e1540e555ad7232646a",
                 "shasum": ""
             },
             "require": {
@@ -576,7 +576,7 @@
                 "source": "https://github.com/netrivet/prophoto-classes/tree/master",
                 "issues": "https://github.com/netrivet/prophoto-classes/issues"
             },
-            "time": "2016-03-30 17:56:22"
+            "time": "2016-03-31 17:07:00"
         },
         {
             "name": "netrivet/wp-event-emitter",
