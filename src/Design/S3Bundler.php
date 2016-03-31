@@ -155,7 +155,11 @@ class S3Bundler extends Bundler
     {
         $data = parent::getBundleData($bundle);
         $bucket = get_option('prophoto_s3_bundler_bucket');
-        $data['bucket'] = $bucket;
+        $region = get_option('prophoto_s3_bundler_region');
+        $data['s3'] = [
+            'bucket' => $bucket,
+            'region' => $region
+        ];
         return $data;
     }
 }
