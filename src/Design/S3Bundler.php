@@ -16,17 +16,10 @@ class S3Bundler extends Bundler
      */
     public function bundle(Bundle $bundle)
     {
-        // return null if json file could not be created
-        $jsonFile = $this->bundleData($bundle);
-        if ($jsonFile === null) {
-            return null;
-        }
+        $bundle = $this->prepare($bundle);
 
-        // return null if ANY assets failed to upload to S3
-        try {
-            $this->upload($bundle);
-        } catch(\Exception $e) {
-            return null;
+        if ($bundle === null) {
+            return $bundle;
         }
 
         // create a zip out of just the json file
@@ -40,6 +33,31 @@ class S3Bundler extends Bundler
         }
 
         return $fileName;
+    }
+
+    /**
+     * Prepare the S3 bundle. This will compress the JSON and upload
+     * valid assets to S3
+     *
+     * @param Bundle $bundle
+     * @return Bundle|null
+     */
+    protected function prepare(Bundle $bundle)
+    {
+        // return null if json file could not be created
+        $jsonFile = $this->bundleData($bundle);
+        if ($jsonFile === null) {
+            return null;
+        }
+
+        // return null if ANY assets failed to upload to S3
+        try {
+            $this->upload($bundle);
+        } catch(\Exception $e) {
+            return null;
+        }
+
+        return $bundle;
     }
 
     /**
@@ -124,5 +142,19 @@ class S3Bundler extends Bundler
                 'secret' => get_option('prophoto_s3_bundler_secret'),
             ]
         ];
+    }
+
+    /**
+     * Add the S3 bucket to the bundled JSON data
+     *
+     * @param {Bundle} $bundle
+     * @return {Array}
+     */
+    protected function getBundleData(Bundle $bundle)
+    {
+        $data = parent::getBundleData($bundle);
+        $bucket = get_option('prophoto_s3_bundler_bucket');
+        $data['bucket'] = $bucket;
+        return $data;
     }
 }
