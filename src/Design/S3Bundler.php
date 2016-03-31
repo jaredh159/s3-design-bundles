@@ -90,7 +90,7 @@ class S3Bundler extends Bundler
     protected function uploadAssets(S3Client $client, Bundle $bundle, $bucket)
     {
         $promises = [];
-        $dir = sanitize_title_with_dashes($bundle->getName());
+        $dir = $this->getRootDir($bundle);
         $images = $bundle->getImages();
         $fonts = $bundle->getFonts();
         $assets = array_merge($images, $fonts);
@@ -121,7 +121,7 @@ class S3Bundler extends Bundler
         }
 
         $promises = [];
-        $dir = sanitize_title_with_dashes($bundle->getName());
+        $dir = $this->getRootDir($bundle);
         foreach ($galleries as $gallery) {
             $id = $gallery->getId();
             $folder = "$dir/$id";
@@ -158,8 +158,8 @@ class S3Bundler extends Bundler
     /**
      * Add the S3 bucket to the bundled JSON data
      *
-     * @param {Bundle} $bundle
-     * @return {Array}
+     * @param Bundle $bundle
+     * @return array
      */
     protected function getBundleData(Bundle $bundle)
     {
@@ -167,9 +167,22 @@ class S3Bundler extends Bundler
         $bucket = get_option('prophoto_s3_bundler_bucket');
         $region = get_option('prophoto_s3_bundler_region');
         $data['s3'] = [
+            'root' => $this->getRootDir($bundle),
             'bucket' => $bucket,
             'region' => $region
         ];
         return $data;
+    }
+
+    /**
+     * Returns the root dir name that will represent the bundle in S3
+     *
+     * @param Bundle $bundle
+     * @return string
+     */
+    protected function getRootDir(Bundle $bundle)
+    {
+        $name = apply_filters('prophoto_s3_bundle_name', $bundle->getName());
+        return sanitize_title_with_dashes($name);
     }
 }
