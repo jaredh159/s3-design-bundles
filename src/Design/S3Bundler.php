@@ -16,9 +16,9 @@ class S3Bundler extends Bundler
      */
     public function bundle(Bundle $bundle)
     {
-        $bundle = $this->prepare($bundle);
+        $jsonFile = $this->prepare($bundle);
 
-        if ($bundle === null) {
+        if ($jsonFile === null) {
             return $bundle;
         }
 
@@ -37,10 +37,11 @@ class S3Bundler extends Bundler
 
     /**
      * Prepare the S3 bundle. This will compress the JSON and upload
-     * valid assets to S3
+     * valid assets to S3. Returns a path to the design json if S3 upload and json generation
+     * are successful
      *
      * @param Bundle $bundle
-     * @return Bundle|null
+     * @return string|null
      */
     protected function prepare(Bundle $bundle)
     {
@@ -57,7 +58,7 @@ class S3Bundler extends Bundler
             return null;
         }
 
-        return $bundle;
+        return $jsonFile;
     }
 
     /**
