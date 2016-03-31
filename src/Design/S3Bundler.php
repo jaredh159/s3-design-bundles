@@ -3,6 +3,7 @@
 namespace ProPhoto\S3DesignBundles\Design;
 
 use Aws\S3\S3Client;
+use GuzzleHttp\Promise\Promise;
 use ProPhoto\Core\Model\Design\Bundle;
 use ProPhoto\Infrastructure\Service\Design\Distribution\Bundler;
 
@@ -53,7 +54,8 @@ class S3Bundler extends Bundler
 
         // return null if ANY assets failed to upload to S3
         try {
-            $this->upload($bundle);
+            $promise = $this->upload($bundle);
+            $promise->wait(); // wait until all uploads have finished
         } catch(\Exception $e) {
             return null;
         }
@@ -65,14 +67,16 @@ class S3Bundler extends Bundler
      * Upload all assets to S3
      *
      * @param Bundle $bundle
+     * @return Promise
      */
     protected function upload(Bundle $bundle)
     {
         $config = $this->getAwsConfig();
         $client = new S3Client($config);
         $bucket = get_option('prophoto_s3_bundler_bucket');
-        $this->uploadAssets($client, $bundle, $bucket);
-        $this->uploadGalleries($client, $bundle, $bucket);
+        $assetPromises  = $this->uploadAssets($client, $bundle, $bucket);
+        $galleryPromises = $this->uploadGalleries($client, $bundle, $bucket);
+        return \GuzzleHttp\Promise\all(array_merge($assetPromises, $galleryPromises));
     }
 
     /**
@@ -81,21 +85,24 @@ class S3Bundler extends Bundler
      * @param S3Client $client
      * @param Bundle $bundle
      * @param string $bucket
+     * @return Promise[]
      */
     protected function uploadAssets(S3Client $client, Bundle $bundle, $bucket)
     {
+        $promises = [];
         $dir = sanitize_title_with_dashes($bundle->getName());
         $images = $bundle->getImages();
         $fonts = $bundle->getFonts();
         $assets = array_merge($images, $fonts);
         foreach ($assets as $asset) {
-            $client->putObject([
+            $promises[] = $client->putObjectAsync([
                 'Bucket' => $bucket,
                 'Key' => "$dir/" . basename($asset),
                 'Body' => fopen($asset, 'r'),
                 'ACL' => 'public-read'
             ]);
         }
+        return $promises;
     }
 
     /**
@@ -104,21 +111,23 @@ class S3Bundler extends Bundler
      * @param S3Client $client
      * @param Bundle $bundle
      * @param $bucket
+     * @return Promise[]
      */
     protected function uploadGalleries(S3Client $client, Bundle $bundle, $bucket)
     {
         $galleries = $bundle->getGalleries();
         if (empty($galleries)) {
-            return;
+            return [];
         }
 
+        $promises = [];
         $dir = sanitize_title_with_dashes($bundle->getName());
         foreach ($galleries as $gallery) {
             $id = $gallery->getId();
             $folder = "$dir/$id";
             $images = $gallery->getImages();
             foreach ($images as $image) {
-                $client->putObject([
+                $promises[] = $client->putObjectAsync([
                     'Bucket' => $bucket,
                     'Key' => "$folder/" . basename($image),
                     'Body' => fopen($image, 'r'),
@@ -126,6 +135,7 @@ class S3Bundler extends Bundler
                 ]);
             }
         }
+        return $promises;
     }
 
     /**
