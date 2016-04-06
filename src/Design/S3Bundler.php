@@ -73,7 +73,7 @@ class S3Bundler extends Bundler
     {
         $config = $this->getAwsConfig();
         $client = new S3Client($config);
-        $bucket = get_option('prophoto_s3_bundler_bucket');
+        $bucket = get_site_option('prophoto_s3_bundler_bucket');
         $assetPromises  = $this->uploadAssets($client, $bundle, $bucket);
         $galleryPromises = $this->uploadGalleries($client, $bundle, $bucket);
         return \GuzzleHttp\Promise\all(array_merge($assetPromises, $galleryPromises));
@@ -147,10 +147,10 @@ class S3Bundler extends Bundler
     {
         return [
             'version' => 'latest',
-            'region' => get_option('prophoto_s3_bundler_region'),
+            'region' => get_site_option('prophoto_s3_bundler_region'),
             'credentials' => [
-                'key' => get_option('prophoto_s3_bundler_key'),
-                'secret' => get_option('prophoto_s3_bundler_secret'),
+                'key' => get_site_option('prophoto_s3_bundler_key'),
+                'secret' => get_site_option('prophoto_s3_bundler_secret'),
             ]
         ];
     }
@@ -164,8 +164,8 @@ class S3Bundler extends Bundler
     protected function getBundleData(Bundle $bundle)
     {
         $data = parent::getBundleData($bundle);
-        $bucket = get_option('prophoto_s3_bundler_bucket');
-        $region = get_option('prophoto_s3_bundler_region');
+        $bucket = get_site_option('prophoto_s3_bundler_bucket');
+        $region = get_site_option('prophoto_s3_bundler_region');
         $data['s3'] = [
             'root' => $this->getRootDir($bundle),
             'bucket' => $bucket,
